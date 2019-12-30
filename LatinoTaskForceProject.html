@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+  	<meta charset="utf-8">
+	<title>Latino Task Force leaflet openStreetMap</title>
+  <!-- external stylesheets -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+</head>
+<body>
+
+  <!-- description of how to use the map -->
+  <p align = "center" >
+  Interested in your Elected Officials, City Boards or Non Profit Boards & Commissions? <br>
+  Enter your Boulder County zip code below to find out more!
+  <p/>
+
+<!-- creates zip code input box and takes input when "enter" key is pressed-->
+  	 <input type="text" placeholder="Enter zip Code" id="zipC", onkeydown="Enter()"/>
+
+ <!-- flag to check that zip code entered is valid -->
+    <p id = "invalidInput"</p>
+
+    <!-- size of map on page-->
+    <div id="map" style="width: 100%; height: 900px;"></div>
+
+  	<!-- representative descriptions below, in the process of being collected and will be added under the map on the page-->
+    <p id="boulderPageSectionEO" >
+
+  	</p>
+
+    <p id="boulderPageSectionCB">
+
+    </p>
+
+    <p id="boulderPageSectionNP">
+
+    </p>
+
+    <p id="longmontPageSectionEO">
+
+    </p>
+
+    <p id="longmontPageSectionCB">
+
+    </p>
+
+    <p id="longmontPageSectionNP">
+
+    </p>
+
+    <p id="louisvillePageSectionEO">
+
+    </p>
+
+    <p id="louisvillePageSectionCB">
+
+    </p>
+
+    <p id="louisvillePageSectionNP">
+
+    </p>
+
+    <p id="lafayettePageSectionEO">
+
+    </p>
+
+    <p id="lafayettePageSectionCB">
+
+    </p>
+
+    <p id="lafayettePageSectionNP">
+
+    </p>
+
+<!-- importing leaflet javascript library -->
+<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+
+<script>
+
+let zipLocation = [
+
+  {
+    zip: 80305,
+    city: "Boulder",
+    latitude: 39.979691,
+    longitude: -105.252586
+  },
+
+  {
+    zip: 80304,
+    city: "Boulder",
+    latitude: 40.039784,
+    longitude: -105.27938
+  },
+
+  {
+    zip: 80303,
+    city: "Boulder",
+    latitude: 39.989135,
+    longitude: -105.22883
+  },
+
+  {
+    zip: 80301,
+    city: "Boulder",
+    latitude: 40.044385,
+    longitude: -105.21928
+  },
+
+  {
+    zip: 80302,
+    city: "Boulder",
+    latitude: 40.020885,
+    longitude: -105.29673
+  },
+
+  {
+    zip: 80504,
+    city: "Longmont",
+    latitude: 40.160138,
+    longitude: -105.01772
+  },
+
+  {
+    zip: 80501,
+    city: "Longmont",
+    latitude: 40.171484,
+    longitude: -105.10033
+  },
+
+  {
+    zip: 80503,
+    city: "Longmont",
+    latitude: 40.156035,
+    longitude: -105.17365
+  },
+
+  {
+    zip: 80027,
+    city: "Louisville",
+    latitude: 39.963322,
+    longitude: -105.15053
+  },
+
+  {
+    zip: 80026,
+    city: "Lafayette",
+    latitude: 40.002156,
+    longitude: -105.10036
+  },
+
+] // closing bracket
+
+// location of where to center map
+var map = L.map('map',{ center: [40.0150, -105.2705], zoom: 13});
+
+//Add OpenStreetMap tile layer to map element
+L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
+
+// loop though zipLocation [] to add zip code markers to map and redirect user to the correct section
+// based on the zip code entered
+for (let i = 0; i < zipLocation.length; i++)
+{
+  // add zip code markers to map
+  boulderZipCode = new L.marker([zipLocation[i].latitude, zipLocation[i].longitude]).addTo(map);
+
+  if (zipLocation[i].city == "Boulder")
+  {
+     // make text in marker pop up link to text in the page
+    boulderZipCode.bindPopup('<a href="#boulderPageSectionEO" >Elected Officials</a> <br> <a href="#boulderPageSectionCB" >City Boards & Commissions</a> <br> <a href="#boulderPageSectionNP" >Non Profit Boards & Commissions</a>');
+  }
+  if (zipLocation[i].city == "Longmont")
+  {
+    boulderZipCode.bindPopup('<a href="#longmontPageSectionEO" >Elected Officials</a> <br> <a href="#longmontPageSectionCB" >City Boards & Commissions</a> <br> <a href="#longmontPageSectionNP" >Non Profit Boards & Commissions</a>');
+  }
+  if (zipLocation[i].city == "Louisville")
+  {
+    boulderZipCode.bindPopup('<a href="#louisvillePageSectionEO" >Elected Officials</a> <br> <a href="#louisvillePageSectionCB" >City Boards & Commissions</a> <br> <a href="#louisvillePageSectionNP" >Non Profit Boards & Commissions</a>');
+  }
+  if (zipLocation[i].city == "Lafayette")
+  {
+    boulderZipCode.bindPopup('<a href="#lafayettePageSectionEO" >Elected Officials</a> <br> <a href="#lafayettePageSectionCB" >City Boards & Commissions</a> <br> <a href="#lafayettePageSectionNP" >Non Profit Boards & Commissions</a>');
+  }
+
+} // end of for loop
+
+
+// function to zoom into zip code entered by user or report errror if zip code entered is not found
+function goTo(){
+  var found = false
+	var zipCode = document.getElementById("zipC").value;
+
+  for (let i = 0; i < zipLocation.length; i++)
+  {
+    if (zipCode == zipLocation[i].zip)
+    {
+      	// third parameter is the zoom level
+      map.setView(new L.LatLng(zipLocation[i].latitude, zipLocation[i].longitude), 15);
+      found = true
+    }
+
+  }
+  if (found == false)
+  {
+
+    document.getElementById("invalidInput").innerHTML = "<i>Zip code entered was not found. <br> Either because the zip code is not in Boulder County or there is no data currently available. <br> Try a different zip code.</i>";
+  }
+  else
+  {
+    // remove error message when user trys again and the entered zip code is correct
+    document.getElementById("invalidInput").innerHTML = " ";
+  }
+
+}
+
+// if the enter key is pressed search for zip code
+function Enter(){
+	// the key code for the return/ enter key is 13
+	if(event.keyCode == 13)
+	{
+		goTo();
+	}
+}
+
+</script>
+
+<!-- data collection for pop up links still in progress -->
+<p align = "center" >
+Data collection for links in marker pop-ups is still in progress...
+<p/>
+
+</body>
+</html>
